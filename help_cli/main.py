@@ -8,12 +8,25 @@ import datetime
 app = typer.Typer()
 
 @app.command()
-def mapping():
+def mapping(
+    caminho: Path = typer.Option(
+        Path.cwd(), 
+        "--caminho", "-c", 
+        help="Caminho da pasta que será organizada. O padrão é a pasta atual."
+    )
+):
     """
-    Organiza a pasta atual separando os arquivos por extensão.
-    (ex: python main.py mapping)
+    Organiza a pasta separando os arquivos por extensão.
+    (ex: help-cli mapping --caminho "C:/Users/SeuUsuario/Downloads")
     """
-    pasta_alvo = Path.cwd()
+    # 1. Garante que o caminho é absoluto (completo) e resolve atalhos
+    pasta_alvo = caminho.resolve()
+
+    # 2. Nova Trava de Segurança: Verifica se o caminho digitado realmente existe e é uma pasta
+    if not pasta_alvo.exists() or not pasta_alvo.is_dir():
+        print(f"Erro: O diretório '{pasta_alvo}' não existe ou é inválido.")
+        raise typer.Abort()
+
     rules = {
         "Documentos": [".pdf", ".docx", ".txt", ".xlsx"],
         "Imagens": [".jpg", ".jpeg", ".png", ".gif"],
@@ -21,19 +34,17 @@ def mapping():
         "Videos": [".mp4", ".mkv"]
     }
 
-    # 1. Lista de arquivos sagrados que NUNCA devem ser movidos
-    arquivos_ignorados = [".gitignore", ".md", "requirements.txt", "LICENSE"]
+    arquivos_ignorados = [".gitignore", "README.md", "requirements.txt", "LICENSE"]
 
-    print(f"Scanning through current folder: {pasta_alvo.absolute()}\n")
+    print(f"Scanning through folder: {pasta_alvo}\n")
 
-    # 2. Trava de segurança nativa do Typer
-    confirmacao = typer.confirm("Você tem certeza que deseja organizar os arquivos desta pasta?")
+    # Atualizamos a mensagem de confirmação para mostrar a pasta exata que será afetada
+    confirmacao = typer.confirm(f"Você tem certeza que deseja organizar os arquivos de '{pasta_alvo.name}'?")
     if not confirmacao:
         print("Operação cancelada. Nenhum arquivo foi movido.")
-        raise typer.Abort() # Interrompe a execução
+        raise typer.Abort()
 
     for arquivo in pasta_alvo.iterdir():
-        # 3. Adicionamos a verificação dos arquivos ignorados na condição
         if arquivo.is_file() and arquivo.suffix != ".py" and arquivo.name not in arquivos_ignorados:
             
             extensao = arquivo.suffix.lower()
