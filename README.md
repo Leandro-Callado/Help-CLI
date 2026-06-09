@@ -1,50 +1,60 @@
 # Help-CLI
 
-O **Help-CLI** é uma ferramenta de linha de comando (CLI) projetada para automatizar tarefas simples e organizar arquivos de forma eficiente. O projeto foi recentemente reestruturado como um pacote Python instalável.
+O **Help-CLI** é uma ferramenta de linha de comando (CLI) focada em produtividade, organização automática de arquivos e manutenção de espaço em disco.
 
 ## 🚀 Funcionalidades
 
-A CLI fornece os seguintes comandos:
+Atualmente, o projeto conta com duas ferramentas principais:
 
-- **`ola`**: Um comando simples que recebe um nome e retorna uma saudação.
-- **`mapping`**: Organiza automaticamente os arquivos no diretório atual, movendo-os para pastas categorizadas por extensão.
-  - **Segurança**: Inclui uma solicitação de confirmação antes de iniciar a movimentação.
-  - **Filtros**: Ignora automaticamente arquivos de sistema e configuração como `.py`, `.gitignore`, `.md`, `requirements.txt` e `LICENSE`.
+### 1. `mapping`
+Organiza automaticamente o diretório onde o comando é executado, movendo arquivos para pastas específicas com base em suas extensões.
+- **Confirmação de Segurança**: Solicita permissão antes de realizar qualquer alteração.
+- **Preservação de Arquivos**: Ignora automaticamente arquivos críticos como scripts Python (`.py`), configurações do Git (`.gitignore`), documentação (`.md`), e arquivos de licença ou requisitos.
 
-### Categorias de Organização:
+#### Categorias de Organização:
 - **Documentos**: `.pdf`, `.docx`, `.txt`, `.xlsx`
 - **Imagens**: `.jpg`, `.jpeg`, `.png`, `.gif`
 - **Executáveis**: `.exe`, `.msi`
 - **Vídeos**: `.mp4`, `.mkv`
-- **Outros**: Arquivos com extensões não mapeadas.
+- **Outros**: Extensões não mapeadas.
+
+### 2. `compact`
+Identifica, compacta em um arquivo `.zip` e remove arquivos que não foram modificados há um determinado número de dias. Ideal para realizar "limpezas pesadas" e liberar espaço.
+- **Parâmetro de Tempo**: Permite definir o limite de dias (padrão é 90 dias).
+- **Segurança**: Solicita confirmação antes de compactar e apagar os arquivos originais.
+- **Inteligência**: Ignora arquivos ocultos, scripts Python e outros arquivos ZIP para evitar recursividade ou perda de dados essenciais.
 
 ## 🛠️ Instalação e Uso
 
-Como o projeto agora é um pacote, você pode instalá-lo localmente para usar o comando `help_cli` de qualquer lugar no seu terminal.
+O projeto está estruturado como um pacote Python, facilitando a instalação e o uso global.
 
-### 1. Instalação Local (Modo Editável)
-No diretório raiz do projeto, execute:
+### 1. Instalação Local
+No diretório raiz do projeto, instale em modo editável:
 ```bash
 pip install -e .
 ```
 
-### 2. Como Usar
-Após a instalação, você pode chamar a ferramenta diretamente pelo nome definido no `setup.py`:
+### 2. Como Utilizar
+Após instalado, utilize os comandos diretamente no terminal:
 
 ```bash
-# Saudação
-help_cli ola "Seu Nome"
-
-# Organização de arquivos
+# Organizar a pasta atual por extensão
 help_cli mapping
+
+# Compactar arquivos não modificados há mais de 90 dias (padrão)
+help_cli compact
+
+# Compactar arquivos não modificados há mais de 30 dias
+help_cli compact --dias 30
 ```
 
 ## 📂 Estrutura do Projeto
 
-- `help_cli/`: Diretório principal do pacote.
-  - `main.py`: Contém a lógica dos comandos da CLI.
-- `setup.py`: Configuração de instalação do pacote.
+- `help_cli/`: Pacote principal contendo o código-fonte.
+  - `main.py`: Implementação dos comandos utilizando a biblioteca `typer`.
+- `setup.py`: Script de configuração para instalação e definição do ponto de entrada da CLI.
+- `.gitignore`: Configurado para ignorar caches, ambientes virtuais e artefatos de build.
 
 ## 🚧 Status do Projeto
 
-Este projeto está em constante evolução. A reestruturação para pacote permite uma distribuição mais fácil e melhor organização do código.
+O Help-CLI está em desenvolvimento ativo. O foco atual é adicionar mais ferramentas de utilidade diária e melhorar a robustez das operações de arquivo.
