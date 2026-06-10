@@ -7,9 +7,11 @@ O **Help-CLI** é uma ferramenta de linha de comando (CLI) focada em produtivida
 Atualmente, o projeto conta com duas ferramentas principais:
 
 ### 1. `mapping`
-Organiza automaticamente o diretório onde o comando é executado, movendo arquivos para pastas específicas com base em suas extensões.
-- **Confirmação de Segurança**: Solicita permissão antes de realizar qualquer alteração.
-- **Preservação de Arquivos**: Ignora automaticamente arquivos críticos como scripts Python (`.py`), configurações do Git (`.gitignore`), documentação (`.md`), e arquivos de licença ou requisitos.
+Organiza arquivos em pastas específicas com base em suas extensões.
+- **Flexibilidade de Caminho**: Agora você pode especificar qual pasta deseja organizar usando a opção `--caminho` (ou `-c`). Se não for informado, o comando utilizará a pasta atual.
+- **Validação Robusta**: Verifica se o caminho informado existe e é um diretório válido antes de iniciar.
+- **Confirmação de Segurança**: Solicita permissão explícita mostrando o nome da pasta que será afetada.
+- **Preservação de Arquivos**: Ignora automaticamente arquivos críticos como scripts Python (`.py`), configurações do Git (`.gitignore`), documentação (`README.md`), e arquivos de licença ou requisitos.
 
 #### Categorias de Organização:
 - **Documentos**: `.pdf`, `.docx`, `.txt`, `.xlsx`
@@ -19,10 +21,10 @@ Organiza automaticamente o diretório onde o comando é executado, movendo arqui
 - **Outros**: Extensões não mapeadas.
 
 ### 2. `compact`
-Identifica, compacta em um arquivo `.zip` e remove arquivos que não foram modificados há um determinado número de dias. Ideal para realizar "limpezas pesadas" e liberar espaço.
-- **Parâmetro de Tempo**: Permite definir o limite de dias (padrão é 90 dias).
+Identifica, compacta em um arquivo `.zip` e remove arquivos que não foram modificados há um determinado número de dias. Ideal para realizar "limpezas pesadas".
+- **Parâmetro de Tempo**: Permite definir o limite de dias (padrão é 90 dias) com a opção `--dias`.
 - **Segurança**: Solicita confirmação antes de compactar e apagar os arquivos originais.
-- **Inteligência**: Ignora arquivos ocultos, scripts Python e outros arquivos ZIP para evitar recursividade ou perda de dados essenciais.
+- **Inteligência**: Ignora arquivos ocultos, scripts Python e outros arquivos ZIP.
 
 ## 🛠️ Instalação e Uso
 
@@ -38,8 +40,13 @@ pip install -e .
 Após instalado, utilize os comandos diretamente no terminal:
 
 ```bash
-# Organizar a pasta atual por extensão
+# Organizar a pasta atual
 help_cli mapping
+
+# Organizar uma pasta específica
+help_cli mapping --caminho "C:/Caminho/Para/Sua/Pasta"
+# ou de forma abreviada
+help_cli mapping -c ./Downloads
 
 # Compactar arquivos não modificados há mais de 90 dias (padrão)
 help_cli compact
