@@ -84,7 +84,7 @@ def compact(
     pasta_alvo = caminho.resolve()
 
     if not pasta_alvo.exists() or not pasta_alvo.is_dir():
-        print(f"❌ Erro: O diretório '{pasta_alvo}' não existe ou é inválido.")
+        print(f"Erro: O diretório '{pasta_alvo}' não existe ou é inválido.")
         raise typer.Abort()
 
     agora = datetime.datetime.now()
@@ -125,7 +125,7 @@ def compact(
             arquivo.unlink() # Apaga o original
             
     print(f"\nLimpeza pesada concluída! Arquivos salvos com segurança em: {nome_zip.name}")
-    
+
 # Ponto de entrada do CLI
 if __name__ == "__main__":
     app()
